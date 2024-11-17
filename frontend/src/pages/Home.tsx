@@ -4,6 +4,7 @@ import { CheckIcon, ColorSwatch, Group } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaEyeDropper } from "react-icons/fa";
+import Output from "./Output";
 
 interface Response {
   expr: string;
@@ -69,7 +70,17 @@ const Home = () => {
       });
 
       const resp = await response.data;
-      console.log(resp);
+      console.log({resp});
+      const expressions = resp?.data?.[0]?.expr || "No expression available";
+const results = resp?.data?.[0]?.result || "No result available";
+
+console.log(`Expression: ${expressions} and Result: ${results}`)
+      setResult({
+        expression:expressions,
+        answer:results
+      })  
+
+
     }
   };
 
@@ -140,7 +151,9 @@ const Home = () => {
         >
           Calculate
         </Button>
-        </div>
+      </div>
+      <div>
+
       <canvas
         ref={canvasRef}
         id="canvas"
@@ -150,6 +163,8 @@ const Home = () => {
         onMouseMove={draw}
         onMouseOut={stopDrawing}
         />
+        {/* <Output /> */}
+        </div>
     </>
   );
 };
