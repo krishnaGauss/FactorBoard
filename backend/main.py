@@ -6,7 +6,7 @@ from constants import SERVER_URL, PORT, ENV
 from apps.calculator.route import router as calculator_router
 
 
-@asynccontextmanager
+@asynccontextmanager    
 async def lifespan(app: FastAPI):
     yield
 

@@ -1,4 +1,5 @@
 # FactorBoard
+
 A GenAI solution making whiteboards better than ever. Factorio is an AI based whiteboard that helps web users to unleash the power of Notes APP on iPads. This whiteboard app recognises what the user draws and gives the required output to the user.
 
 ### Taking Help From
@@ -8,24 +9,32 @@ A GenAI solution making whiteboards better than ever. Factorio is an AI based wh
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Prototype Image](#prototype-image)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
-- [Prototype Video](#prototype-video)
 - [License](#license)
 
 ## Project Overview
 
 ### Key Features
-- **AI-Driven Handwriting Recognition**: Converts user-drawn text and diagrams into machine-readable formats.  
-- **Real-Time Output Generation**: Processes handwritten input and generates relevant outputs instantly.  
-- **Interactive User Interface**: Provides a user-friendly whiteboard environment for seamless interaction.  
+
+- **AI-Driven Handwriting Recognition**: Converts user-drawn text and diagrams into machine-readable formats.
+- **Real-Time Output Generation**: Processes handwritten input and generates relevant outputs instantly.
+- **Interactive User Interface**: Provides a user-friendly whiteboard environment for seamless interaction.
 - **Multi-Device Compatibility**: Accessible on various platforms, enabling easy collaboration and usage across devices.
 
 ### Technologies Used
+
 - **React:** Frontend framework for building the user interface.
 - **Python & FastAPI:** For GeminiAPI integration and fine tuning on Gemini model.
 - **Axios:** HTTP client for making API requests.
 - **Tailwind CSS & shadcn:** Utility-first CSS framework and components for building a responsive and consistent UI.
+
+## Prototype Video
+
+![Prototype Video](/frontend/public/proto.mp4)
+
+![Prototype Image](/frontend/public/image_factorio.png)
 
 ## Installation
 
@@ -34,10 +43,11 @@ A GenAI solution making whiteboards better than ever. Factorio is an AI based wh
 ```bash
 git clone https://github.com/krishnaGauss/FactorBoard.git
 ```
+
 ### Install Dependencies
 
 - Install Frontend Dependencies:
-In project root directory;
+  In project root directory;
 
 ```bash
 cd frontend
@@ -45,7 +55,7 @@ npm i
 ```
 
 - Install Backend Dependencies:
-In project root directory;
+  In project root directory;
 
 ```bash
 cd backend
@@ -54,38 +64,40 @@ myenv/Scripts/activate
 pip install -r requirements.txt
 ```
 
-### Creating `.env` files 
+### Creating `.env` files
+
 - In `frontend` directory setup a `.env` file with the following attributes;
+
 ```text
 VITE_API_URL = <Your VITE_API_URL>/Backend Server URL
 ```
+
 - In `backend` directory setup a `.env` file with the following attributes;
+
 ```text
 GEMINI_API_KEY=<YOUR KEY>
 ```
 
 ## Running the Application
 
-### Running Frontend 
+### Running Frontend
 
-In root directory; 
+In root directory;
+
 ```bash
 cd frontend
 npm run dev
 ```
-### Running Backend 
 
-In root directory; 
+### Running Backend
+
+In root directory;
+
 ```bash
 cd backend
 myenv/Scripts/activate
 python main.py
 ```
-
-## Prototype Video
-
-![Prototype Video](/frontend/public/proto.mp4)
-
 
 ## License
 
