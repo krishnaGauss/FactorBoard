@@ -3,7 +3,6 @@ import { SWATCHES } from "@/constants";
 import { CheckIcon, ColorSwatch, Group } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { FaEyeDropper } from "react-icons/fa";
 import Output from "./Output";
 
 interface Response {
@@ -22,7 +21,6 @@ const Home = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("rgb(255, 255, 255)");
   const [reset, setReset] = useState(false);
-  const [checked, setChecked] = useState(false);
   const [result, setResult] = useState<GeneratedResult>();
   const [dictOfVars, setDictOfVars] = useState({});
 
@@ -39,7 +37,6 @@ const Home = () => {
   useEffect(() => {
     if (reset) {
       resetCanvas();
-      // setLatexExpression([]);
       setResult(undefined);
       setDictOfVars({});
       setReset(false);
@@ -55,7 +52,17 @@ const Home = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight - canvas.offsetTop;
         ctx.lineCap = "round";
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 7;
+
+        const handleResize = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight - canvas.offsetTop;
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+          window.removeEventListener("resize", handleResize);
+        };
       }
     }
   }, []);
@@ -64,23 +71,27 @@ const Home = () => {
     const canvas = canvasRef.current;
     if (canvas) {
       const URL = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${URL}/calculate`, {
-        image: canvas.toDataURL("image/png"),
-        dict_of_vars: dictOfVars,
-      });
+      try {
+        const response = await axios.post(`${URL}/calculate`, {
+          image: canvas.toDataURL("image/png"),
+          dict_of_vars: dictOfVars,
+        });
 
-      const resp = await response.data;
-      console.log({resp});
-      const expressions = resp?.data?.[0]?.expr || "No expression available";
-const results = resp?.data?.[0]?.result || "No result available";
+        const resp = response.data;
+        console.log({ resp });
 
-console.log(`Expression: ${expressions} and Result: ${results}`)
-      setResult({
-        expression:expressions,
-        answer:results
-      })  
+        const expressions = resp?.data?.[0]?.expr || "No expression available";
+        const results = resp?.data?.[0]?.result || "No result available";
 
+        console.log(`Expression: ${expressions}, Result: ${results}`);
 
+        setResult({
+          expression: expressions,
+          answer: results,
+        });
+      } catch (error) {
+        console.error("Error fetching calculation result:", error);
+      }
     }
   };
 
@@ -116,33 +127,40 @@ console.log(`Expression: ${expressions} and Result: ${results}`)
   };
 
   return (
-    <>
-      <div className="flex gap-20 px-2 p-1 bg-slate-700">
+    <div className="relative w-screen h-screen bg-black">
+      <canvas
+        ref={canvasRef}
+        id="canvas"
+        className="absolute top-0 left-0 w-full h-full bg-black"
+        onMouseDown={startDrawing}
+        onMouseUp={stopDrawing}
+        onMouseMove={draw}
+        onMouseOut={stopDrawing}
+      />
+
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex flex-wrap gap-4 items-center justify-center bg-gray-700 p-4 rounded-lg">
         <Button
           className="h-12 w-24 text-white bg-red-600 font-semibold text-base hover:bg-red-800 rounded-lg"
           onClick={() => setReset(true)}
         >
           Reset
         </Button>
-        <div className="flex gap-2 rounded-lg w-50">
-          <Group className="z-20">
-            {SWATCHES.map((colors) => {
-              return (
-                <ColorSwatch
-                  color={colors}
-                  key={colors}
-                  onClick={() => {
-                    setColor(colors);
-                    setChecked((c) => !c);
-                  }}
-                  style={{ color: "#fff", cursor: "pointer" }}
-                >
-                  {checked && colors === color && (
-                    <CheckIcon className="w-4 h-4" />
-                  )}
-                </ColorSwatch>
-              );
-            })}
+        <div className="flex gap-2 items-center">
+          <Group className="flex-wrap justify-center">
+            {SWATCHES.map((colors) => (
+              <ColorSwatch
+                color={colors}
+                key={colors}
+                onClick={() => setColor(colors)}
+                style={{
+                  color: "#fff",
+                  cursor: "pointer",
+                  border: colors === color ? "2px solid white" : "none",
+                }}
+              >
+                {colors === color && <CheckIcon className="w-4 h-4" />}
+              </ColorSwatch>
+            ))}
           </Group>
         </div>
         <Button
@@ -152,20 +170,8 @@ console.log(`Expression: ${expressions} and Result: ${results}`)
           Calculate
         </Button>
       </div>
-      <div>
-
-      <canvas
-        ref={canvasRef}
-        id="canvas"
-        className="absolute left-0 w-full h-[92.2vh] bg-black"
-        onMouseDown={startDrawing}
-        onMouseUp={stopDrawing}
-        onMouseMove={draw}
-        onMouseOut={stopDrawing}
-        />
-        {/* <Output /> */}
-        </div>
-    </>
+      {result && <Output res={result.answer} expr={result.expression} />}
+    </div>
   );
 };
 

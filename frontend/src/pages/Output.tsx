@@ -1,10 +1,32 @@
-const Output = () => {
+import React from "react";
+
+interface OutputProps {
+  res: string;
+  expr: string;
+}
+
+const Output: React.FC<OutputProps> = ({ res, expr }) => {
   return (
-    <div className="w-[25vw] h-[30vh] fixed right-0 bottom-0 border-2 border-red-600 flex  justify-center">
-      <div className="border-2 border-yellow-500 w-[25vw] h-[5vh] flex items-center justify-center">
-        <p className="text-white font-mono font-bold text-lg">Output</p>
+    <div className="fixed bottom-4 right-4 w-[28vw] h-auto bg-gradient-to-br from-blue-700 to-purple-700 p-4 rounded-xl shadow-xl border-2 border-gray-200 text-white">
+      <div className="border-b-2 border-gray-400 pb-2 mb-4">
+        <h2 className="font-mono text-2xl font-bold text-center">
+          🧮 Output
+        </h2>
       </div>
-        {/* <p className="text-white font-serif text-base">{props.expr}</p> */}
+      <div className="space-y-4">
+        <div className="text-lg font-serif">
+          <strong>Expression:</strong>
+          <p className="animate-typing border-r-2 border-white inline whitespace-nowrap overflow-hidden max-w-full">
+            {expr}
+          </p>
+        </div>
+        <div className="text-lg font-serif">
+          <strong>Result:</strong>
+          <p className="animate-typing border-r-2 border-white inline whitespace-nowrap overflow-hidden max-w-full">
+            {res}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
