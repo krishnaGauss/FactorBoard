@@ -5,11 +5,11 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Output from "./Output";
 
-interface Response {
-  expr: string;
-  result: string;
-  assign: boolean;
-}
+// interface Response {
+//   expr: string;
+//   result: string;
+//   assign: boolean;
+// }
 
 interface GeneratedResult {
   expression: string;
